@@ -2,7 +2,7 @@
 #include <OneWire.h>
 
 OneWire  ds(2); 
-#define RELAY1  7 
+#define RELAY1  3 
 int t=0;
 void setup(void) {
   Serial.begin(38400);
@@ -105,7 +105,7 @@ void loop(void) {
     
 if (Serial.available()>0) // Checks for a character in the serial monitor
 {
-int x = Serial.parseInt();
+float x = Serial.parseInt();
 t=x;
 }
   {
@@ -119,10 +119,10 @@ t=x;
   }
   
 }
-  //Serial.println(t);
+  
   Serial.print(celsius);
   Serial.println(" C");
-  delay(2000);
+  delay(500);
   
   }
   
