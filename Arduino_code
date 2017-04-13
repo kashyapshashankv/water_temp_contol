@@ -64,7 +64,7 @@ t=x;
   Serial.print(fahrenheit);
   Serial.print(" F");
   Serial.print(":");
-  delay(300);
+  delay(500);
  }
   
   
