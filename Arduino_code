@@ -1,22 +1,35 @@
-// You will need a Onewire library for Arduino.
 #include <OneWire.h>
+#include <LiquidCrystal.h>
 #define RELAY1  3 
 OneWire  ds(2); 
-int t;
-void setup(void) {
-  Serial.begin(38400);
-  pinMode(RELAY1, OUTPUT);
- }
-
-void loop(void) {
+float t;
   byte i;
   byte present = 0;
   byte type_s;
   byte data[12];
   byte addr[8];
   float celsius, fahrenheit;
+LiquidCrystal lcd(12, 11, 7, 6, 5, 4);
+void setup(void) {
+  Serial.begin(38400);
+  lcd.begin(16, 2);
+  pinMode(RELAY1, OUTPUT);
+ }
+
+void loop() {
+  temp();
+  bts();
+  disp();
+  bt();
+  relay();
   
-  if ( !ds.search(addr)) {
+  
+  }
+
+
+void temp()
+{
+if ( !ds.search(addr)) {
     ds.reset_search();
     delay(100);
     return;
@@ -45,29 +58,70 @@ void loop(void) {
   }
   celsius = (float)raw / 16.0;
   fahrenheit = celsius * 1.8 + 32.0;
-  if (Serial.available()>0) // Checks for a character in the serial monitor
+}
+
+void bt()
+{
+if (Serial.available()>0) // Checks for a character in the serial monitor
 {
 int x = Serial.parseInt();
 t=x;
+//Serial.print(t);
 }
+}
+
+void relay()
   {
    if (celsius>t){
    digitalWrite(RELAY1,1);     
    }
-   else{
+   else if((t-10)>celsius>(t-15))
+   {
+    //Serial.print("a");
    digitalWrite(RELAY1,0);
+   delay(2000);
+   digitalWrite(RELAY1,1);
+   delay(3000);
    }
+   else if((t-5)>celsius>(t-10))
+   {
+    //Serial.print("b");
+   digitalWrite(RELAY1,0);
+   delay(2000);
+   digitalWrite(RELAY1,1);
+   delay(4000);
+   }
+   else if(t>celsius>(t-5))
+   {
+    //Serial.print("c");
+   digitalWrite(RELAY1,0);
+   delay(2000);
+   digitalWrite(RELAY1,1);
+   delay(5000);
+   }
+   else{
+    //Serial.print("d");
+    digitalWrite(RELAY1,0);
+    }
   }
+
+void bts()  
+  {
   Serial.print(celsius);
+  //Serial.write(byte(176));
   Serial.print(" C");
   Serial.print(":");
   Serial.print(fahrenheit);
+  //Serial.write(byte(176));
   Serial.print(" F");
   Serial.print(":");
   delay(500);
  }
-  
-  
-  
-  // The code is modified such that it can take input from Serial monitor and proceed to other function.
-  // @kashyapshashankv
+
+ void disp()
+ {
+ lcd.setCursor(0, 0);
+ lcd.print("Temp. : ");
+ lcd.print(celsius);
+ lcd.print("\337C"); 
+  }
