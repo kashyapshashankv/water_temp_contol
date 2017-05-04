@@ -3,5 +3,7 @@ Controling water temperature by interfacing a DS18B20 temperature sensor and 5V 
 
 A Bluetooth module will also be required for Exchanging DATA between Arduino pro mini and an Android application Developed using MIT App inventor 2.
 
+App has some awesome features like voice control and text to speech to make it more user freindly.
+
 
 @kashyapshashankv
